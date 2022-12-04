@@ -1,2 +1,0 @@
-# community-analysis-full Script 
-
