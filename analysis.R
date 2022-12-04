@@ -477,4 +477,3 @@ pr.tree <- predict(agrocapi.tree,new.soil)
 plot(xy,cex=pr.tree*2.5+1)
 points(xy[Agro.capi>0,],pch=16,cex=0.8,col="darkgreen") # Actual presence-absence
 points(xy[Agro.capi>0 & pr.tree < 1.0,],pch=16,cex=1,col="red") # Reduction of the presence
-
