@@ -459,8 +459,6 @@ ordisurf(o.mds1,df$Topsoil.pH,add=T) #contour levels for pH
 soil.var <- df
 Agro.capi <- vasc.plants[,"Agrostis.capillaris"]>0
 Gal.sax <- vasc.plants[,"Galium.saxatile"]>0
-# Using a tree
-library(tree)
 # Agrostis capillaris
 agrocapi.tree <- tree(Agro.capi~.,data=soil.var)
 plot(agrocapi.tree)
