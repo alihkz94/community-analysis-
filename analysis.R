@@ -473,7 +473,8 @@ plot(galsax.tree)
 text(galsax.tree,cex=0.7)
 mtext(substitute(paste(bold("Galium saxatile"))),side = 3, line = 1,adj=0.5)
 # Obtaining coordinates
-xy <- env %>% select(Site.no.,Longitude,Latitude) %>% drop_na()
+xy <- env %>% select(Site.no.,Longitude,Latitude) %>% 
+  rename("Latitude"=Longitude,"Longitude"=Latitude) %>% drop_na()
 row.names(xy) <- xy$Site.no.
 xy <- xy %>% select(-Site.no.)
 xy <- xy[order(row.names(xy)), ]
