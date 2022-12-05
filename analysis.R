@@ -501,3 +501,5 @@ pr.galsax.tree1 <- predict(galsax.tree,new.soil)
 plot(xy,cex=pr.galsax.tree1*2.5+1)
 points(xy[Gal.sax>0,],pch=16,cex=0.8,col="darkgreen") # Actual presence-absence
 points(xy[Gal.sax>0 & pr.galsax.tree1 < 1.0,],pch=16,cex=1,col="red") # Reduction of the presence
+
+##END!
