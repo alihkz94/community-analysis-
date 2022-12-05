@@ -16,7 +16,7 @@ library(rgdal)
 library(tree)
 setwd("~/University Courses/Data analysis in community Ecology/project")
 #######################################################
-#step 1 : illustrate the data distribution on the map #
+#step 1 : illustrate the data distribution on the map # BY ALI HAKIMZADEH 
 ######################################################
 
 #CAUTHION: FOR RUNNING THE CODE FOR GENRATING THE MAP YOU NEED THE LATEST VERSION OF "R". ##
@@ -50,7 +50,7 @@ ggplot()+
   geom_sf(data = meta_sf, aes(colour = Country))+theme_bw()
 
 ####################################################
-#step 2: reading the species and environmental data#
+#step 2: reading the species and environmental data# BY PIIA TOMINGAS & ALI HAKIMZADEH
 ####################################################
 
 #reading species data
@@ -145,7 +145,7 @@ vasc.plants <- vasc.plants %>% select(-Site.number)
 
 
 #############################
-#Step 3: Diversity analysis #
+#Step 3: Diversity analysis # BY ALI HAKIMZADEH & BLANCA LUZ CALENO RUIZ
 #############################
 
 #### Shannon diversity index #####
@@ -162,9 +162,21 @@ diversity.shannon1 = diversity(bryo,"shannon")
 eff.richness = exp(diversity.shannon)
 eff.richness1 = exp(diversity.shannon1)
 
+##### Dark Diversity ######
+
+# Dark diversity of bryophites plants
+dark.bryo <- rowSums(DarkDiv(bryo)$Dark>0.7,na.rm=T)
+# Dark diversity of vascular plants
+dark.vasc <- rowSums(DarkDiv(vasc.plants)$Dark>0.7,na.rm=T)
+# Dark diversity related to environment
+hist(dark.bryo)
+shapiro.test(dark.bryo) # not-normal, p-value = 0.0004406
+hist(dark.vasc)
+shapiro.test(dark.vasc) # not-normal, p-value = 2.226e-05
+
 
 ##############################################################################################################
-#step 4: Shapiro test and correlation test on the environmental data for richness and dark diversity analysis# 
+#step 4: Shapiro test and correlation test on the environmental data for richness and dark diversity analysis# BY ALI HAKIMZADEH & BLANCA LUZ CALENO RUIZ
 ##############################################################################################################
 
 #### Shapiro test for normality #####  
@@ -193,17 +205,7 @@ cor.test(df$Topsoil.NO3,richness1, method = "spearman", exact = FALSE) # have co
 cor.test(df$Topsoil.NH4,richness1, method = "spearman", exact = FALSE) 
 cor.test(df$Topsoil.Olsen.P,richness1, method = "spearman", exact = FALSE)
 
-##### Dark Diversity ######
 
-# Dark diversity of bryophites plants
-dark.bryo <- rowSums(DarkDiv(bryo)$Dark>0.7,na.rm=T)
-# Dark diversity of vascular plants
-dark.vasc <- rowSums(DarkDiv(vasc.plants)$Dark>0.7,na.rm=T)
-# Dark diversity related to environment
-hist(dark.bryo)
-shapiro.test(dark.bryo) # not-normal, p-value = 0.0004406
-hist(dark.vasc)
-shapiro.test(dark.vasc) # not-normal, p-value = 2.226e-05
 # correlation between vascular plants
 cor.test(df$Topsoil.pH,dark.vasc, method = "spearman", exact = FALSE)# significant correlation
 plot(df$Topsoil.pH,dark.vasc)
@@ -221,7 +223,7 @@ cor.test(df$Topsoil.NH4,dark.bryo, method = "spearman", exact = FALSE)
 cor.test(df$Topsoil.Olsen.P,dark.bryo, method = "spearman", exact = FALSE)
 
 #############################################################
-# step 5: Models of richness and dark vs. environmental data#
+# step 5: Models of richness and dark vs. environmental data# BY BLANCA LUZ CALENO RUIZ
 #############################################################
 
 # Vascular plants
@@ -257,7 +259,7 @@ plot(mod.dark.bryo)# the model is so good
 
 
 ####################################################
-# Step 6 : Community Distance matrix and clustering#
+# Step 6 : Community Distance matrix and clustering# BY PIIA TOMINGAS
 ###################################################
 
 #calculating distance matrices 
@@ -357,9 +359,9 @@ dend1 = set(dend1, "labels_cex", 0.4)
 plot(dend1)
 rect.hclust(o.clu.b, 4, border = "red")
 
-######################################################
-#Step 7 : NMDS ANALYSIS and diversity related to NMDS + RDA ANALYSIS# 
-######################################################
+#####################################################################
+#Step 7 : NMDS ANALYSIS and diversity related to NMDS + RDA ANALYSIS# BY ALI HAKIMZADEH & BLANCA LUZ CALENO RUIZ
+#####################################################################
 
 ##### NMDS analysis ####
 com.vas <- log1p(vasc.plants)
@@ -439,8 +441,8 @@ anova(bryo.rda,by="mar") # NO3 and NH4 influence the ocurrence and abundance of 
 anova(bryo.rda,by="axis") # RDA1 is significant
 
 ###########################################
-#Step 8:Environment related to ordination #
-##########################################
+#Step 8:Environment related to ordination # BY BLANCA LUZ CALENO RUIZ
+###########################################
 
 #vasc plants 
 o.ev <- envfit(o.mds,df)
@@ -500,5 +502,24 @@ pr.galsax.tree1 <- predict(galsax.tree,new.soil)
 plot(xy,cex=pr.galsax.tree1*2.5+1)
 points(xy[Gal.sax>0,],pch=16,cex=0.8,col="darkgreen") # Actual presence-absence
 points(xy[Gal.sax>0 & pr.galsax.tree1 < 1.0,],pch=16,cex=1,col="red") # Reduction of the presence
+
+##################################################################################
+#Step 9: Discovering the correlations between species richness and dark diversity# BY PIIA TOMINGAS
+##################################################################################
+hist(richness)
+shapiro.test(richness) #not normal distribution
+hist(dark.vasc)
+shapiro.test(dark.vasc) #not normal distribution
+cor.test(richness, dark.vasc, method = "spearman")
+plot(richness, dark.vasc, xlab = "Vasc. plant species richness", ylab = "Vasc. plant dark diversity")
+#Vascular plant richness and dark diversity are positively correlated (rs = 0.282, N = 153, p = 0.0004).
+#(see the correlations between dark/species diversity and soil ph and nutrients, these explain nicely)
+shapiro.test(richness1) #not normal distribution
+shapiro.test(dark.bryo) #not normal distribution
+cor.test(richness1, dark.bryo, method = "spearman")
+plot(richness1, dark.bryo, xlab = "Bryophyte species richness", ylab = "Bryophyte dark diversity")
+#Bryophyte richness and dark diversity are negatively correlated (rs = -0.581, N = 153, p < 0.05).
+#(see the correlations between dark/species diversity and soil ph and nutrients, these explain nicely)
+
 
 ##END!
