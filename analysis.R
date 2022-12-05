@@ -454,26 +454,50 @@ plot(o.ev1,add=T)
 ordisurf(o.mds1,df$Topsoil.pH,add=T) #contour levels for pH 
 
 
-###### Species Distribution modelling for vascular species #####
-
+###### Species Distribution modelling for vascular species
 # Calcifugous grasslands are dominated by grasses Agrostis capillaris and Festuca rubra, Galium.saxatile Festuca.rubra
-soil.var <- df[,c("Topsoil.pH","Topsoil.NH4","Topsoil.NO3")]
+soil.var <- df
 Agro.capi <- vasc.plants[,"Agrostis.capillaris"]>0
+Gal.sax <- vasc.plants[,"Galium.saxatile"]>0
+# Using a tree
+library(tree)
+# Agrostis capillaris
 agrocapi.tree <- tree(Agro.capi~.,data=soil.var)
 plot(agrocapi.tree)
 text(agrocapi.tree)
-
+mtext(substitute(paste(bold("Agrostis capillaris"))),side = 3, line = 1,adj=0.5)
+# Galium saxatile
+galsax.tree <- tree(Gal.sax~.,data=soil.var)
+plot(galsax.tree)
+text(galsax.tree,cex=0.7)
+mtext(substitute(paste(bold("Galium saxatile"))),side = 3, line = 1,adj=0.5)
 # Obtaining coordinates
-xy <- map %>% select(Site.no.,lat,lon)
+xy <- environmentaldata %>% select(Site.no.,Longitude,Latitude) %>% drop_na()
 row.names(xy) <- xy$Site.no.
 xy <- xy %>% select(-Site.no.)
 xy <- xy[order(row.names(xy)), ]
 all(row.names(xy)==row.names(vasc.plants))# verifying order
-points(xy[Agro.capi>0,],pch=16,cex=0.8,col="darkgreen") # Actual presence-absence
+# Predicting
+# Agrostis capillaris
+pr.agrocapi.tree <- predict(agrocapi.tree)
+plot(xy,cex=pr.agrocapi.tree*2.5+1)
+points(xy[Agro.capi>0,],pch=16,cex=1,col="darkgreen") # Actual presence-absence
+# Galium saxatile
+pr.galsax.tree <- predict(galsax.tree)
+plot(xy,cex=pr.galsax.tree*2.5+1)
+points(xy[Gal.sax>0,],pch=16,cex=1,col="darkgreen") # Actual presence-absence
 # Increasing 30 units of NH4
+# Agrostis capillaris
 new.soil <- soil.var
-new.soil[,2] <- new.soil[,2]+30
-pr.tree <- predict(agrocapi.tree,new.soil)
-plot(xy,cex=pr.tree*2.5+1)
+new.soil[,4] <- new.soil[,4]+30
+pr.agrocapi.tree1 <- predict(agrocapi.tree,new.soil)
+plot(xy,cex=pr.agrocapi.tree1*2.5+1)
 points(xy[Agro.capi>0,],pch=16,cex=0.8,col="darkgreen") # Actual presence-absence
-points(xy[Agro.capi>0 & pr.tree < 1.0,],pch=16,cex=1,col="red") # Reduction of the presence
+points(xy[Agro.capi>0 & pr.agrocapi.tree1 < 1.0,],pch=16,cex=1,col="red") # Reduction of the presence
+# Galium saxatile
+new.soil <- soil.var
+new.soil[,4] <- new.soil[,4]+30
+pr.galsax.tree1 <- predict(galsax.tree,new.soil)
+plot(xy,cex=pr.galsax.tree1*2.5+1)
+points(xy[Gal.sax>0,],pch=16,cex=0.8,col="darkgreen") # Actual presence-absence
+points(xy[Gal.sax>0 & pr.galsax.tree1 < 1.0,],pch=16,cex=1,col="red") # Reduction of the presence
