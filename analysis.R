@@ -454,7 +454,7 @@ plot(o.ev1,add=T)
 ordisurf(o.mds1,df$Topsoil.pH,add=T) #contour levels for pH 
 
 
-###### Species Distribution modelling for vascular species
+###### Species Distribution modelling for vascular species #####
 # Calcifugous grasslands are dominated by grasses Agrostis capillaris and Festuca rubra, Galium.saxatile Festuca.rubra
 soil.var <- df
 Agro.capi <- vasc.plants[,"Agrostis.capillaris"]>0
