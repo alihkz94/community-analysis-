@@ -254,35 +254,7 @@ hist(mod.dark.bryo$residuals)
 shapiro.test(mod.dark.bryo$residuals)
 plot(mod.dark.bryo)# the model is so good
 
-## Constrained ordination to see community composition and relation to environmental variables
-Topsoil.pH<- df$Topsoil.pH
-Topsoil.Al <- df$Topsoil.Al
-Topsoil.NO3 <- df$Topsoil.NO3
-Topsoil.NH4 <- df$Topsoil.NH4
-Topsoil.Olsen.P <- df$Topsoil.Olsen.P
-dev.off()
 
-# Vascular plants
-vasc.rda <- rda(vasc.plants~Topsoil.pH+Topsoil.Al+Topsoil.NO3+Topsoil.NH4+Topsoil.Olsen.P,scale=T)
-plot(vasc.rda)
-plot(vasc.rda,type="n")
-points(vasc.rda,"sites",col="red",pch=16)
-points(vasc.rda,"cn")
-text(vasc.rda,"cn")
-anova(vasc.rda)# Highly significant model
-anova(vasc.rda,by="mar") # pH and NO3 influence the ocurrence and abundance of species
-anova(vasc.rda,by="axis") # RDA1 and RDA2 are significant
-
-# Bryophytes
-bryo.rda <- rda(bryo~Topsoil.pH+Topsoil.Al+Topsoil.NO3+Topsoil.NH4+Topsoil.Olsen.P,scale=T)
-plot(bryo.rda)
-plot(bryo.rda,type="n")
-points(bryo.rda,"sites",col="red",pch=16)
-points(bryo.rda,"cn")
-text(bryo.rda,"cn")
-anova(bryo.rda)# Significant model
-anova(bryo.rda,by="mar") # NO3 and NH4 influence the ocurrence and abundance of species
-anova(bryo.rda,by="axis") # RDA1 is significant
 
 ####################################################
 # Step 6 : Community Distance matrix and clustering#
@@ -386,7 +358,7 @@ plot(dend1)
 rect.hclust(o.clu.b, 4, border = "red")
 
 ######################################################
-#Step 7 : NMDS ANALYSIS and diversity related to NMDS# 
+#Step 7 : NMDS ANALYSIS and diversity related to NMDS + RDA ANALYSIS# 
 ######################################################
 
 ##### NMDS analysis ####
@@ -436,6 +408,35 @@ ordisurf(o.mds1, dark.vasc, col= "grey", main ="Dark diversity bryophytes", add 
 ordihull(o.mds1, o.grel1, col = 1:4)
 legend("bottomleft", legend = unique(o.grel1), col = unique(o.grel1),
        pch = unique(o.grel1), lwd = 1)
+## Constrained ordination to see community composition and relation to environmental variables
+Topsoil.pH<- df$Topsoil.pH
+Topsoil.Al <- df$Topsoil.Al
+Topsoil.NO3 <- df$Topsoil.NO3
+Topsoil.NH4 <- df$Topsoil.NH4
+Topsoil.Olsen.P <- df$Topsoil.Olsen.P
+dev.off()
+
+# Vascular plants
+vasc.rda <- rda(vasc.plants~Topsoil.pH+Topsoil.Al+Topsoil.NO3+Topsoil.NH4+Topsoil.Olsen.P,scale=T)
+plot(vasc.rda)
+plot(vasc.rda,type="n")
+points(vasc.rda,"sites",col="red",pch=16)
+points(vasc.rda,"cn")
+text(vasc.rda,"cn")
+anova(vasc.rda)# Highly significant model
+anova(vasc.rda,by="mar") # pH and NO3 influence the ocurrence and abundance of species
+anova(vasc.rda,by="axis") # RDA1 and RDA2 are significant
+
+# Bryophytes
+bryo.rda <- rda(bryo~Topsoil.pH+Topsoil.Al+Topsoil.NO3+Topsoil.NH4+Topsoil.Olsen.P,scale=T)
+plot(bryo.rda)
+plot(bryo.rda,type="n")
+points(bryo.rda,"sites",col="red",pch=16)
+points(bryo.rda,"cn")
+text(bryo.rda,"cn")
+anova(bryo.rda)# Significant model
+anova(bryo.rda,by="mar") # NO3 and NH4 influence the ocurrence and abundance of species
+anova(bryo.rda,by="axis") # RDA1 is significant
 
 ###########################################
 #Step 8:Environment related to ordination #
