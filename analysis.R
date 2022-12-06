@@ -229,15 +229,19 @@ cor.test(df$Topsoil.Olsen.P,dark.bryo, method = "spearman", exact = FALSE)
 # Vascular plants
 mod.rich.vasc <- lm(richness~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.rich.vasc)
+dev.off()
 hist(mod.rich.vasc$residuals)
 shapiro.test(mod.rich.vasc$residuals)
 par(mfrow =c(2,2))
 plot(mod.rich.vasc)
+
 # Bryophytes
 mod.rich.bryo <- lm(richness1~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.rich.bryo)
+dev.off()
 hist(mod.rich.bryo$residuals)
 shapiro.test(mod.rich.bryo$residuals)
+par(mfrow =c(2,2))
 plot(mod.rich.bryo)
 ###### Models of dark diversity vs. environmental data #####
 
