@@ -187,40 +187,35 @@ shapiro.test(df$Topsoil.Al) # not normal p-value = 0.0000000000000008622
 shapiro.test(df$Topsoil.NO3) # not normal p-value = 0.00000000000000022
 shapiro.test(df$Topsoil.Olsen.P) # not normal p-value = 0.0000000000005304 
 
-#### correlation #####
+#### correlation between dark diversity and environmental variables #####
 
-##vasplants
-
-cor.test(df$Topsoil.pH,richness, method = "spearman", exact = FALSE) 
-cor.test(df$Topsoil.Al,richness, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.NO3,richness, method = "spearman", exact = FALSE) #don't have a correlation
-cor.test(df$Topsoil.NH4,richness, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.Olsen.P,richness, method = "spearman", exact = FALSE) #don't have a correlation 
+## vasplants
+cor.test(df$Topsoil.pH,richness, method = "spearman", exact = FALSE) # Significant correlation
+plot(df$Topsoil.pH,richness,xlab="Soil pH",ylab="Richness",pch=16)
+mtext("Cor: 0.69, p < 0.001",side = 3, line = -1,adj=0.04)
+cor.test(df$Topsoil.Al,richness, method = "spearman", exact = FALSE) # Significant correlation
+plot(df$Topsoil.Al,richness)
+cor.test(df$Topsoil.NO3,richness, method = "spearman", exact = FALSE)
+cor.test(df$Topsoil.NH4,richness, method = "spearman", exact = FALSE) # Significant correlation
+plot(df$Topsoil.NH4,richness,xlab="Soil NH4",ylab="Richness",pch=16)
+mtext("Cor: -0.25, p < 0.002",side = 3, line = -1,adj=0.96)
+cor.test(df$Topsoil.Olsen.P,richness, method = "spearman", exact = FALSE)
 
 # bryo
-
 cor.test(df$Topsoil.pH,richness1, method = "spearman", exact = FALSE)
 cor.test(df$Topsoil.Al,richness1, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.NO3,richness1, method = "spearman", exact = FALSE) # have correlation between them 
-cor.test(df$Topsoil.NH4,richness1, method = "spearman", exact = FALSE) 
+cor.test(df$Topsoil.NO3,richness1, method = "spearman", exact = FALSE) # Significant correlation
+plot(df$Topsoil.NO3,richness1,xlab="Soil NO3",ylab="Richness",pch=16)
+mtext("Cor: -0.21, p < 0.010",side = 3, line = -1,adj=0.96)
+cor.test(df$Topsoil.NH4,richness1, method = "spearman", exact = FALSE)
 cor.test(df$Topsoil.Olsen.P,richness1, method = "spearman", exact = FALSE)
 
+# eviro
+cor.test(df$Topsoil.NO3,df$Topsoil.pH, method = "spearman", exact = FALSE)
+cor.test(df$Topsoil.NH4,df$Topsoil.pH, method = "spearman", exact = FALSE) # significant correlation
+cor.test(df$Topsoil.Al,df$Topsoil.pH, method = "spearman", exact = FALSE) # significant correlation
+cor.test(df$Topsoil.Olsen.P,df$Topsoil.pH, method = "spearman", exact = FALSE)
 
-# correlation between vascular plants
-cor.test(df$Topsoil.pH,dark.vasc, method = "spearman", exact = FALSE)# significant correlation
-plot(df$Topsoil.pH,dark.vasc)
-cor.test(df$Topsoil.Al,dark.vasc, method = "spearman", exact = FALSE)# significant correlation
-plot(df$Topsoil.Al,dark.vasc)
-cor.test(df$Topsoil.NO3,dark.vasc, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.NH4,dark.vasc, method = "spearman", exact = FALSE)# significant correlation
-plot(df$Topsoil.NH4,dark.vasc)
-cor.test(df$Topsoil.Olsen.P,dark.vasc, method = "spearman", exact = FALSE)
-# bryo
-cor.test(df$Topsoil.pH,dark.bryo, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.Al,dark.bryo, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.NO3,dark.bryo, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.NH4,dark.bryo, method = "spearman", exact = FALSE)
-cor.test(df$Topsoil.Olsen.P,dark.bryo, method = "spearman", exact = FALSE)
 
 #############################################################
 # step 5: Models of richness and dark vs. environmental data# BY BLANCA LUZ CALENO RUIZ
@@ -229,26 +224,21 @@ cor.test(df$Topsoil.Olsen.P,dark.bryo, method = "spearman", exact = FALSE)
 # Vascular plants
 mod.rich.vasc <- lm(richness~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.rich.vasc)
-dev.off()
 hist(mod.rich.vasc$residuals)
 shapiro.test(mod.rich.vasc$residuals)
 par(mfrow =c(2,2))
 plot(mod.rich.vasc)
-
 # Bryophytes
 mod.rich.bryo <- lm(richness1~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.rich.bryo)
-dev.off()
 hist(mod.rich.bryo$residuals)
 shapiro.test(mod.rich.bryo$residuals)
-par(mfrow =c(2,2))
 plot(mod.rich.bryo)
 ###### Models of dark diversity vs. environmental data #####
 
 # Vascular plants
 mod.dark.vasc <- lm(dark.vasc~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.dark.vasc)# pH is the significant explanatory variable
-dev.off()
 hist(mod.dark.vasc$residuals)
 shapiro.test(mod.dark.vasc$residuals)
 par(mfrow =c(2,2))
@@ -257,10 +247,8 @@ plot(mod.dark.vasc)# the model is so good
 # Bryophytes
 mod.dark.bryo <- lm(dark.bryo~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.dark.bryo)# there are not effects of environmental variables
-dev.off()
 hist(mod.dark.bryo$residuals)
 shapiro.test(mod.dark.bryo$residuals)
-par(mfrow =c(2,2))
 plot(mod.dark.bryo)# the model is so good
 
 
