@@ -248,6 +248,7 @@ plot(mod.rich.bryo)
 # Vascular plants
 mod.dark.vasc <- lm(dark.vasc~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.dark.vasc)# pH is the significant explanatory variable
+dev.off()
 hist(mod.dark.vasc$residuals)
 shapiro.test(mod.dark.vasc$residuals)
 par(mfrow =c(2,2))
@@ -256,8 +257,10 @@ plot(mod.dark.vasc)# the model is so good
 # Bryophytes
 mod.dark.bryo <- lm(dark.bryo~df$Topsoil.pH+df$Topsoil.Al+df$Topsoil.NO3+df$Topsoil.NH4+df$Topsoil.Olsen.P)
 summary(mod.dark.bryo)# there are not effects of environmental variables
+dev.off()
 hist(mod.dark.bryo$residuals)
 shapiro.test(mod.dark.bryo$residuals)
+par(mfrow =c(2,2))
 plot(mod.dark.bryo)# the model is so good
 
 
