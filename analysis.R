@@ -517,5 +517,44 @@ plot(richness1, dark.bryo, xlab = "Bryophyte species richness", ylab = "Bryophyt
 #Bryophyte richness and dark diversity are negatively correlated (rs = -0.581, N = 153, p < 0.05).
 #(see the correlations between dark/species diversity and soil ph and nutrients, these explain nicely)
 
+#ANOVA analysis based on management type
+#Fixing the environment table
+env[is.na(env)] = 0
+env = env[1:153,]
+#Hypothesis 3:
+#Areas which are managed by cutting have a lower vascular plant species diversity than grazed areas.
+#It should be so, because moderate grazing creates more heterogeneous habitats
+#than uniform cutting.
+#Using grazing intensity levels
+m1 = lm(richness ~ as.factor(env$Grazing.intensity)) #p=0.008, significant impact
+anova(m1)
+plot(richness ~ env$Grazing.intensity, xlab = "Grazing intensity", ylab = "Vasc. plant species richness", axes = F)
+xlabel = c(0, 1, 2, 3)
+axis(1, at=xlabel)
+axis(2)
+box()
+summary(m1)
+#Only intensive grazing (level 3) differs from cutting (p = 0.005), considering species richness of the site,
+#and this is not in accordance with our hypothesis.
+#This could be so, because we do not have any data about cutting intensity, but it could
+#be moderate and therefore in favour of a diverse plant community.
+#We can say that areas with intensive grazing have got a significantly lower
+#vascular plant species richness, compared to cut areas, but areas with low and moderate
+#grazing intensity levels do not seem to differ from cut areas.
+#Hypothesis 4:
+#Vascular plants respond more strongly to the management style of the area
+#than bryophytes. It should be so, because bryophytes do not get cut nor grazed,
+#so it affects them minimally.
+m3 = lm(richness1 ~ as.factor(env$Grazing.intensity)) #non-significant
+anova(m3)
+summary(m3) #non-significant
+plot(env$Grazing.intensity, richness1, xlab = "Grazing intensity", ylab = "Bryophyte species richness", axes = F)
+xlabel = c(0, 1, 2, 3)
+axis(1, at=xlabel)
+axis(2)
+box()
+#Vascular plant species richness responds negatively to intensive grazing (hypothesis 3),
+#but bryophytes do not show any significant response to management style (p = 0.65),
+#which is in accordance with our proposed hypothesis.
 
 ##END!
